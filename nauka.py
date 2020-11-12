@@ -28,6 +28,10 @@ conn.close()
 # ******************************** Okno wstepu programu *********************************************
 
 
+def koniec_programu():
+    root.destroy()
+
+
 def gra():
 
     def wynik():
@@ -38,6 +42,85 @@ def gra():
             gra()
 
         def koniec():
+
+            def tabela_wyników():
+                def graj_ponownie():
+                    o.destroy()
+                    gra()
+
+                tamka.destroy()
+                o = tk.LabelFrame(root, padx=10, pady=10)
+                o.pack(padx=5, pady=5)
+
+                o1 = tk.LabelFrame(o, padx=10, pady=10)
+                o1.pack(padx=5, pady=5, side=TOP)
+
+                o2 = tk.LabelFrame(o, padx=10, pady=10)
+                o2.pack(padx=5, pady=5, side=TOP)
+
+                o3 = tk.LabelFrame(o, padx=10, pady=10)
+                o3.pack(padx=5, pady=5, side=TOP)
+
+                nap = tk.Label(o1, text=" Tabela ostatnich wyników",
+                               font=("Arial", 25), fg="#9400D3")
+                nap.pack()
+
+                nap1 = tk.Label(o2, text=" lp ", font=(
+                    "Arial", 15), fg="#8B008B")
+                nap1.grid(row=0, column=0)
+
+                nap1 = tk.Label(o2, text=" Imie zawodnika ",
+                                font=("Arial", 15), fg="#8B008B")
+                nap1.grid(row=0, column=1)
+
+                nap1 = tk.Label(o2, text=" Rodzaj gry ",
+                                font=("Arial", 15), fg="#8B008B")
+                nap1.grid(row=0, column=2)
+
+                nap1 = tk.Label(o2, text=" Ilość gier ",
+                                font=("Arial", 15), fg="#8B008B")
+                nap1.grid(row=0, column=3)
+
+                nap1 = tk.Label(o2, text=" Poprawne wyniki ",
+                                font=("Arial", 15), fg="#8B008B")
+                nap1.grid(row=0, column=4)
+
+                nap1 = tk.Label(o2, text=" Złe wyniki ",
+                                font=("Arial", 15), fg="#8B008B")
+                nap1.grid(row=0, column=5)
+
+                z = 1
+                conn = sqlite3.connect('gra.db')
+                c = conn.cursor()
+                c.execute("SELECT * FROM wyniki ORDER BY id DESC LIMIT 15")
+                records = c.fetchall()
+                for rect in records:
+                    tk.Label(o2, text=str(rect[0]), font=(
+                        "Arial", 10), fg="#9400D3").grid(row=z, column=0)
+                    tk.Label(o2, text=str(rect[1]), font=(
+                        "Arial", 10), fg="#9400D3").grid(row=z, column=1)
+                    tk.Label(o2, text=str(rect[2]), font=(
+                        "Arial", 10), fg="#9400D3").grid(row=z, column=2)
+                    tk.Label(o2, text=str(rect[3]), font=(
+                        "Arial", 10), fg="#9400D3").grid(row=z, column=3)
+                    tk.Label(o2, text=str(rect[4]), font=(
+                        "Arial", 10), fg="#9400D3").grid(row=z, column=4)
+                    tk.Label(o2, text=str(rect[5]), font=(
+                        "Arial", 10), fg="#9400D3").grid(row=z, column=5)
+                    z += 1
+
+                butt = tk.Button(o3, text="zamknij program",
+                                 fg="#9400D3", command=koniec_programu)
+                butt.grid(row=0, column=0)
+
+                butt = tk.Button(o3, text="zagraj ponownie",
+                                 fg="#9400D3", command=graj_ponownie)
+                butt.grid(row=0, column=1)
+
+            def graj_ponownie():
+                tamka.destroy()
+                gra()
+
             ram.destroy()
             tamka = tk.LabelFrame(root, padx=0, pady=0)
             tamka.pack(padx=10, pady=10)
@@ -53,6 +136,9 @@ def gra():
 
             tamka4 = tk.LabelFrame(tamka, padx=10, pady=10)
             tamka4.pack(padx=10, pady=10)
+
+            tamka5 = tk.LabelFrame(tamka, padx=10, pady=10)
+            tamka5.pack(padx=10, pady=10)
 
             inia = tk.Label(tamka1, text=imieUsera+"! Zdobyłeś " +
                             str(punkty)+" punktów.", font=("Arial", 20), fg="#8B008B")
@@ -83,6 +169,17 @@ def gra():
             conn.commit()
             conn.close()
 
+            butt = tk.Button(tamka5, text="zamknij program",
+                             fg="#9400D3", command=koniec_programu)
+            butt.grid(row=0, column=0)
+
+            butt = tk.Button(tamka5, text="zagraj ponownie",
+                             fg="#9400D3", command=graj_ponownie)
+            butt.grid(row=0, column=1)
+
+            butt = tk.Button(tamka5, text="sprawdz wyniki",
+                             fg="#9400D3", command=tabela_wyników)
+            butt.grid(row=0, column=2)
 
         ra.destroy()
         # wynikUsera=wynikUsera.get()
