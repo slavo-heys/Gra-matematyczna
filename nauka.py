@@ -70,6 +70,19 @@ def gra():
                              str(kolejka)+" razy.", font=("Arial", 20), fg="blue")
             inia3.pack()
             # zapis gry do tabeli
+            conn = sqlite3.connect('gra.db')
+            c = conn.cursor()
+            c.execute("INSERT INTO wyniki VALUES(NULL, :imie, :rodz_gry, :dzialan, :wyn_pop, :wyn_zly)",
+                      {
+                          'imie': imieUsera,
+                          'rodz_gry': "dodawanie",
+                          'dzialan': kolejka,
+                          'wyn_pop': wynikPoprawny,
+                          'wyn_zly': wynikZly
+                      })
+            conn.commit()
+            conn.close()
+
 
         ra.destroy()
         # wynikUsera=wynikUsera.get()
